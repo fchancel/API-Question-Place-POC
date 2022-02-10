@@ -1,0 +1,10 @@
+{
+    "accomodation": "accomodation",
+    "event": "event",
+    "leisure": "leisure",
+    "meeting": "meeting",
+    "sport": "sport",
+    "transport": "transport",
+    "visit": "visit",
+    "other": "other"
+}

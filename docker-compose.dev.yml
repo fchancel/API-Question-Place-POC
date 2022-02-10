@@ -1,0 +1,65 @@
+version: "3.8"
+
+services: 
+  # client:
+  #     tty: true  
+  #     build: 
+  #         context: ./client
+  #         dockerfile: Dockerfile.dev
+  #     depends_on: 
+  #       - api
+  #     volumes: 
+  #         - type: bind
+  #           source: ./client
+  #           target: /app
+  #         - type: volume
+  #           target: /app/node_modules
+  #     ports: 
+  #         - 3000:3000
+  #         - 80:3000
+  #     restart: on-failure
+
+  api:
+    tty: true  
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    env_file: 
+      - ./api/.env.dev
+    volumes: 
+      - type: bind          # bind the  source code for enable live-reload
+        source: ./api
+        target: /app
+    ports:
+      - 8000:8000
+      - 10001:10001         # 10001 for debugger configuration. Set PYTHON_DEBUGGER to bind vscode debugger to docker container
+    restart: on-failure
+    depends_on: 
+      - db
+    # the api wait for the database to be ready
+    command: ["./wait-for-it.sh", "db:7687", "--", "uvicorn", "main:api", "--reload" ,"--host", "0.0.0.0", "--port", "8000"]
+
+  db:
+    tty: true  
+    image: neo4j
+    ports:
+        - 7474:7474
+        - 7687:7687 # For accessing databse from the browser
+    volumes: 
+        - type: volume
+          source: database_dev  # Create the volume with docker volume create --name=database
+          target: /data/
+    environment: 
+      - NEO4J_AUTH=none     # Disable neo4j authentification for development environment
+    restart: on-failure
+
+  db_test:
+    tty: true  
+    # The test database has no volumes since it will be populated by the tests.
+    image: neo4j
+    environment: 
+      - NEO4J_AUTH=none
+    restart: on-failure
+
+volumes: 
+  database_dev:     

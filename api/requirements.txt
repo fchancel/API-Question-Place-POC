@@ -1,0 +1,16 @@
+fastapi
+fastapi-mail
+pydantic
+pydantic[email]
+uvicorn
+neo4j
+passlib[bcrypt]
+Unidecode
+debugpy
+python-jose[cryptography]
+python-multipart
+pytest
+requests
+neomodel
+python-slugify
+lorem-text

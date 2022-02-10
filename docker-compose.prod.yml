@@ -1,0 +1,39 @@
+version: "3.8"
+
+services: 
+  client:
+      build: 
+          context: ./client
+          dockerfile: Dockerfile.prod
+      depends_on: 
+        - api
+      restart: on-failure
+
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    environment: : 
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD
+      - NEO4J_SCHEME=bolt
+      - NEO4J_PORT=7687
+      - ENVIRONMENT=prod
+    restart: on-failure
+    depends_on: 
+      - db
+    # the api wait for the database to be ready
+    command: ["./wait-for-it.sh", "db:7687", "--", "uvicorn", "main:api" ,"--host", "0.0.0.0", "--port", "8000"]
+
+  db:
+    image: neo4j
+    volumes: 
+        - type: volume
+          source: database  # Create the volume with docker volume create --name=database
+          target: /data/
+    restart: on-failure
+
+volumes: 
+  database:
+      external: true                     
