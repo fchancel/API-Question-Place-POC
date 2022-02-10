@@ -1,22 +1,5 @@
-# Tripeerz
+# API
 
-## Instructions
+Concepte:
 
-The project use docker [buildkit](https://docs.docker.com/develop/develop-images/build_enhancements/), we have to use the DOCKER_BUILDKIT env variable.
-`export DOCKER_BUILDKIT=1`    
-
-We need a volume for the database, create it with:
-`docker volume create --name=database_dev`
-
-Build
-`docker-compose   -f docker-compose.dev.yml build`  
-
-Build and run by simply run
-`docker-compose   -f docker-compose.dev.yml up -d `
-
-#### Tests
-
-Lancer les tests:
-`docker exec -t <folder_name>_api_1 pytest --cli-log-level=INFO` 
-
-`-t` act as a pseuo terminal, for output colors
+API crée avec l'aide de FASTAPI, Neo4j, Pydantic. Dont l'objectif était de créer un système de Question/Réponsé similaire à StackOverFlow, avec pour centre d'intérêt, des lieux aux quatre coins du monde. Ainsi l'API possède un système de création d'utilisateur basé sur des Token JWT, un système de feedback entre utilisateurs, et un système permettant de gérer des questions (mise en favoris, edition, création, suppression, récupération), un système de réponse aux questions (création, suppression, édition, Upvote et Downvote, récupération) et un système de commentaire lié aux réponses. (création, suppression, édition, récupération)
